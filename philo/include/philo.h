@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/24 03:42:09 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/24 15:17:55 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,26 @@
 
 # define MAX_PHILO 200
 
-#include <pthread.h>
+# define CYAN "\033[1;36m"
+# define PURPLE "\033[1;35m"
+# define BLUE "\033[1;34m"
+# define YELLOW "\033[1;33m"
+# define GREEN "\033[1;32m"
+# define RED "\033[1;31m"
+# define COLOUR "\033[0m"
+
+# include <pthread.h>
+
+typedef enum e_status
+{
+	DIED = 0,
+	EATING = 1,
+	SLEEPING = 2,
+	THINKING = 3,
+	FORK_1 = 4,
+	FORK_2 = 5
+}	t_status;
+
 typedef struct s_table
 {
 	int	t_num;
@@ -23,6 +42,8 @@ typedef struct s_table
 	int	tt_eat;
 	int	tt_sleep;
 	int	opt_eat;
+	time_t	start_time;
+	pthread_mutex_t	print;
 	pthread_mutex_t	forks[MAX_PHILO];
 }	t_table;
 
@@ -36,6 +57,7 @@ typedef struct s_philo
 	int			thinking;
 	int			dead;
 	int			times_eaten;
+	t_table		*table;
 }	t_philo;
 
 typedef struct s_data
@@ -44,7 +66,6 @@ typedef struct s_data
 	pthread_mutex_t	mutex;
 	t_table			table;
 	t_philo			philo[MAX_PHILO];
-	int				test;
 }	t_data;
 
 #endif
