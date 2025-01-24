@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:08:35 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/22 21:46:35 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/24 11:33:24 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@
 // 	}
 // }
 
-void	free_all(t_data *data)
-{
-	free(data->philo);
-}
+// void	free_all(t_data *data)
+// {
+	// free(data->philo);
+// }
 
 void	init_data(t_data *data, int ac, char **av)
 {
@@ -55,32 +55,19 @@ void	init_data(t_data *data, int ac, char **av)
 		data->table.opt_eat = ft_atoi(av[5]);
 }
 
-void	table_routine(void *arg)
+void	*table_routine(void *arg)
 {
-	(void)arg;
-	printf("Test pilo\n");
+	// t_data *data;
+	//
+	// data = (t_data *)arg;
+	t_philo	*philo;
+
+	philo = (t_philo *)arg;
+	pthread_mutex_lock(&philo->fork[])
+	return NULL;
 }
 
-// int	init_philo(t_data *data)
-// {
-// 	int	i;
-//
-// 	i = 0;
-// 	data->philo = malloc(data->table.t_num * sizeof(t_philo));
-// 	if (!data->philo)
-// 	{
-// 		printf("Error! Creating philo\n");
-// 		return (0);
-// 	}
-// 	while (i < data->table.t_num)
-// 	{
-//
-// 		i++;
-// 	}
-// }
-
-
-// args: num of philo, tt die, tt eat, tt sleep, OPT: num of X must eat
+// args: num of philo, tt die, tt eat, tt sleep, OPT: num of X must eat
 // int main(void)
 int main(int ac, char *av[])
 {
@@ -97,7 +84,7 @@ int main(int ac, char *av[])
 	while (i < data.table.t_num)
 	{
 		// memset(&data.philo[i], 0, sizeof(t_philo));
-		if (!pthread_create(&data.philo[i].th, NULL, (void *)table_routine, NULL))
+		if (pthread_create(&data.philo[i].th, NULL, &table_routine, &data.philo[i]))
 		{
 			printf("Error! Creating Philo!\n");
 			return (1);
@@ -108,7 +95,7 @@ int main(int ac, char *av[])
 	i = 0;
 	while (i < data.table.t_num)
 	{
-		if (!pthread_join(data.philo[i].th, NULL))
+		if (pthread_join(data.philo[i].th, NULL))
 		{
 			printf("Error! Setting table\n");
 			return (1);
@@ -116,6 +103,7 @@ int main(int ac, char *av[])
 		i++;
 	}
 	pthread_mutex_destroy(&data.mutex);
+	ft_printf("data.test = [%d]\n", data.test);
 
 
 
