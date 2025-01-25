@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/24 15:17:55 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/25 02:44:42 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,12 @@ typedef struct s_table
 	int	tt_die;
 	int	tt_eat;
 	int	tt_sleep;
-	int	opt_eat;
+	int	to_eat;
+	int	end;
 	time_t	start_time;
-	pthread_mutex_t	print;
+	pthread_mutex_t	lock_print;
+	pthread_mutex_t	lock_end;
+	pthread_mutex_t	lock_eat;
 	pthread_mutex_t	forks[MAX_PHILO];
 }	t_table;
 
@@ -57,6 +60,7 @@ typedef struct s_philo
 	int			thinking;
 	int			dead;
 	int			times_eaten;
+	time_t		last_meal;
 	t_table		*table;
 }	t_philo;
 
