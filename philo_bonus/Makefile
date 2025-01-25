@@ -1,4 +1,4 @@
-NAME = philo
+NAME = philo_bonus
 
 SRC_DIR = src
 INC_DIR = include
@@ -27,9 +27,9 @@ clean:
 	@echo "Objects files removed."
 
 fclean: clean
-	@echo "Removing $(NAME) and $(BNAME)..."
+	@echo "Removing $(NAME)..."
 	@rm -f $(NAME)
-	@echo "$(NAME) and $(BNAME) removed."
+	@echo "$(NAME) removed."
 
 re: fclean all
 

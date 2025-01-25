@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 00:28:07 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/26 02:00:53 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
 # include <pthread.h>
+# include <semaphore.h>
+
 # define MAX_PHILO 200
 # define ERROR_SYNTAX "Error! Syntax: ./philo <number_of_philosopher> \
 <time_to_die> <time_to_eat> <time_to_sleep> \
@@ -40,17 +42,17 @@ typedef enum e_status
 
 typedef struct s_table
 {
-	int				t_num;
-	int				tt_die;
-	int				tt_eat;
-	int				tt_sleep;
-	int				to_eat;
-	int				end;
-	time_t			start_time;
-	pthread_mutex_t	lock_print;
-	pthread_mutex_t	lock_end;
-	pthread_mutex_t	lock_eat;
-	pthread_mutex_t	forks[MAX_PHILO];
+	int		t_num;
+	int		tt_die;
+	int		tt_eat;
+	int		tt_sleep;
+	int		to_eat;
+	int		end;
+	time_t	start_time;
+	sem_t	*lock_print;
+	sem_t	*lock_end;
+	sem_t	*lock_eat;
+	sem_t	*lock_forks;
 }	t_table;
 
 typedef struct s_philo
