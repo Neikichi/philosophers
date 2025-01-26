@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:28:24 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 02:55:48 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/26 21:37:37 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,9 @@
 
 int	exit_check(t_philo *philo)
 {
-	int	i;
-
-	i = 0;
-	sem_wait(philo->table->lock_end);
-	if (philo->table->end)
-		i = 1;
-	sem_post(philo->table->lock_end);
-	return (i);
+	if (!philo->times_eaten || dead_check(philo))
+		return (1);
+	return (0);
 }
 
 int	exit_error(char *err, int ret)
@@ -38,9 +33,11 @@ int	dead_check(t_philo *philo)
 	sem_wait(philo->table->lock_eat);
 	if (timer_ms() - philo->last_meal >= philo->table->tt_die)
 	{
+		printf("inisde dead_check:[%d] [%ld], [%d]\n", philo->id, (philo->last_meal), philo->table->tt_die);
+		// sem_wait(philo->table->lock_print);
 		print_status(philo, DIED);
 		sem_wait(philo->table->lock_end);
-		philo->table->end = 1;
+		sem_post(philo->table->lock_dead);
 		sem_post(philo->table->lock_end);
 		sem_post(philo->table->lock_eat);
 		return (1);

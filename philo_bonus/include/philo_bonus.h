@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 02:00:53 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/26 18:51:08 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_table
 	sem_t	*lock_end;
 	sem_t	*lock_eat;
 	sem_t	*lock_forks;
+	sem_t	*lock_dead;
 }	t_table;
 
 typedef struct s_philo
