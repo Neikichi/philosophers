@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:28:24 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/29 01:11:48 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/01 03:42:48 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ int	dead_check(t_philo *philo)
 	sem_wait(philo->table->lock_eat);
 	if (timer_ms() - philo->last_meal >= philo->table->tt_die)
 	{
-		print_status(philo, DIED);
 		sem_wait(philo->table->lock_print);
+		print_init(philo, "died", DIED);
 		sem_wait(philo->table->lock_end);
 		philo->table->lock_dead = sem_open("/lock_dead", O_CREAT, 0644, 0);
 		sem_post(philo->table->lock_end);

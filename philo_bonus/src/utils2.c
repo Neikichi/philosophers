@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:22:27 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/31 20:17:31 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/01 03:06:14 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void	print_init(t_philo *philo, char *str, t_status status);
 
 time_t	timer_ms(void)
 {
@@ -44,13 +43,11 @@ void	delay_ms(t_philo *philo, time_t delay_time)
 void	print_status(t_philo *philo, t_status status)
 {
 	sem_wait(philo->table->lock_print);
-	if (death_status())
+	if (exit_check(philo))
 	{
 		sem_post(philo->table->lock_print);
 		return ;
 	}
-	if (status == DIED)
-		print_init(philo, "died", status);
 	else if (status == EATING)
 		print_init(philo, "is eating", status);
 	else if (status == SLEEPING)
@@ -62,7 +59,7 @@ void	print_status(t_philo *philo, t_status status)
 	sem_post(philo->table->lock_print);
 }
 
-static void	print_init(t_philo *philo, char *str, t_status status)
+void	print_init(t_philo *philo, char *str, t_status status)
 {
 	const char	*status_colour;
 

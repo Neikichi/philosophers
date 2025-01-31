@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/28 13:50:41 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/01 03:23:12 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	init_destroy(t_data *data);
 
 // routine
 void	*table_routine(void *arg);
-void	philo_status(t_data *data);
+int		philo_status(t_philo *philo);
 int		death_status(void);
 
 // Input Check
@@ -98,6 +98,7 @@ int		ft_isdigit(int c);
 int		ft_isspace(int c);
 int		ft_issign(char c);
 void	print_status(t_philo *philo, t_status status);
+void	print_init(t_philo *philo, char *str, t_status status);
 time_t	timer_ms(void);
 void	delay_ms(t_philo *philo, time_t delay_time);
 int		exit_error(char *err, int ret);

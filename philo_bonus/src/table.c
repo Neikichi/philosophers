@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 17:44:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 02:29:38 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/01 03:23:01 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,19 @@
 // 	return (NULL);
 // }
 
-void	philo_status(t_data *data)
+int	philo_status(t_philo *philo)
 {
-	int	i;
 	int	loop;
 
 	loop = 1;
 	while (loop)
 	{
-		i = 0;
-		while (loop && i < data->table.t_num)
+		usleep(100);
+		if (exit_check(philo))
 		{
-			usleep(100);
-			if (!data->philo[i].times_eaten || \
-				exit_check(&data->philo[i]) || \
-				dead_check(&data->philo[i]))
-			{
-				loop = 0;
-				break ;
-			}
-			i++;
+			loop = 0;
+			return(1);
 		}
 	}
+	return(0);
 }

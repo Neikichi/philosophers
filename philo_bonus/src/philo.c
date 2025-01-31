@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:08:35 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/29 01:06:51 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/01 03:39:04 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ int	main(int ac, char **av)
 					break ;
 				delay_ms(&data.philo[i], data.table.tt_sleep);
 				print_status(&data.philo[i], THINKING);
+				delay_ms(&data.philo[i], data.table.tt_sleep / 2);
 			}
 			exit(1);
 		}
