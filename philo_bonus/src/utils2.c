@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:22:27 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/28 14:12:51 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/31 20:17:31 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 static void	print_init(t_philo *philo, char *str, t_status status);
 
@@ -34,8 +35,8 @@ void	delay_ms(t_philo *philo, time_t delay_time)
 	delay = timer_ms() + delay_time;
 	while (timer_ms() < delay)
 	{
-		// if (exit_check(philo))
-		// 	break ;
+		if (exit_check(philo))
+			exit(1) ;
 		usleep(100);
 	}
 }
@@ -76,6 +77,6 @@ static void	print_init(t_philo *philo, char *str, t_status status)
 		status_colour = BLUE;
 	else if (status == FORK_1 || status == FORK_2)
 		status_colour = YELLOW;
-	printf("%ld\t" CYAN "%d\t" COLOUR "%s%s\n" COLOUR, \
+	printf("%ld\t" CYAN "%d\t" COLOUR "%s%s" COLOUR "\n", \
 	timer_ms() - philo->table->start_time, philo->id + 1, status_colour, str);
 }
