@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:08:35 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 21:35:10 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/29 01:06:51 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	main(int ac, char **av)
 	t_data	data;
 	pid_t	pid[MAX_PHILO];
 	int i = 0;
+	pid_t	w_pid;
 		
 	if (ac < 5 || ac > 6)
 		return (exit_error(ERROR_SYNTAX, 1));
@@ -49,9 +50,9 @@ int	main(int ac, char **av)
 	data.table.lock_end = sem_open("/lock_end", O_CREAT, 0666, 1);
 	data.table.lock_print = sem_open("/lock_print", O_CREAT, 0666, 1);
 	data.table.lock_eat = sem_open("/lock_eat", O_CREAT, 0666, 1);
-	data.table.lock_dead = sem_open("/lock_dead", O_CREAT, 0666, 0);
+	// data.table.lock_dead = sem_open("/lock_dead", O_CREAT, 0666, 0);
 	data.table.lock_forks = sem_open("/lock_forks", O_CREAT, 0666, data.table.t_num);
-	if (data.table.lock_end == SEM_FAILED || data.table.lock_print == SEM_FAILED || data.table.lock_eat == SEM_FAILED || data.table.lock_dead == SEM_FAILED)
+	if (data.table.lock_end == SEM_FAILED || data.table.lock_print == SEM_FAILED || data.table.lock_eat == SEM_FAILED)
 		return (exit_error("Error! Init Sem\n", 1));
 	while (i < data.table.t_num)
 	{
@@ -72,6 +73,9 @@ int	main(int ac, char **av)
 			return (exit_error("Error! Invalid PID", 1));
 		if (!pid[i])
 		{
+			sem_wait(data.table.lock_eat);
+			data.philo[i].last_meal = timer_ms();
+			sem_post(data.table.lock_eat);
 			// printf("philo->id = [%d] | [%d]\n", data.philo[i].id, i);
 			if (!data.table.tt_die)
 				exit(1);
@@ -89,9 +93,9 @@ int	main(int ac, char **av)
 				sem_post(data.table.lock_forks);
 				exit(1);
 			}
-			// else if (i % 2)
-			// 	delay_ms(&data.philo[i], data.table.tt_sleep);
-			while (1)
+			else if (i % 2)
+				delay_ms(&data.philo[i], data.table.tt_sleep);
+			while (!exit_check(&data.philo[i]))
 			{
 				sem_wait(data.table.lock_forks);
 				print_status(&data.philo[i], FORK_1);
@@ -100,7 +104,6 @@ int	main(int ac, char **av)
 				print_status(&data.philo[i], EATING);
 				sem_wait(data.table.lock_eat);
 				data.philo[i].last_meal = timer_ms();
-				// printf("data.philo[%d].last_meal = [%ld]\n", i, data.philo[i].last_meal);
 				sem_post(data.table.lock_eat);
 				delay_ms(&data.philo[i], data.table.tt_eat);
 				sem_wait(data.table.lock_eat);
@@ -119,28 +122,17 @@ int	main(int ac, char **av)
 		}
 		i++;
 	}
-	if (!data.table.to_eat)
+	w_pid = waitpid(0, NULL, 0);
+	if (death_status())
 	{
-		sem_wait(data.table.lock_dead);
 		for (int i = 0; i < data.table.t_num; i++)
 		{
 			if (!kill(pid[i], 0))
 				kill(pid[i], SIGKILL);
 		}
 	}
-	else
-	{
-		for (int i = 0; i < data.table.t_num; i++)
-		{
-			int count = 0;
-			while (count < data.table.t_num)
-			{
-				pid_t temp = waitpid(-1, NULL, 0);
-				if (temp)
-					count++;
-			}
-		}
-	}
+	while (w_pid != -1)
+		w_pid = waitpid(0, NULL, 0);
 	sem_close(data.table.lock_end);
 	sem_close(data.table.lock_print);
 	sem_close(data.table.lock_eat);

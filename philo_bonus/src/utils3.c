@@ -6,11 +6,12 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:28:24 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 21:37:37 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/29 01:11:48 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <fcntl.h>
 #include <pthread.h>
 #include <semaphore.h>
 #include <stdio.h>
@@ -28,16 +29,26 @@ int	exit_error(char *err, int ret)
 	return (ret);
 }
 
+int	death_status(void)
+{
+	sem_t *death;
+
+	death = sem_open("/lock_dead", 0);
+	if (death == SEM_FAILED)
+		return (0);
+	sem_close(death);
+	return (1);
+}
+
 int	dead_check(t_philo *philo)
 {
 	sem_wait(philo->table->lock_eat);
 	if (timer_ms() - philo->last_meal >= philo->table->tt_die)
 	{
-		printf("inisde dead_check:[%d] [%ld], [%d]\n", philo->id, (philo->last_meal), philo->table->tt_die);
-		// sem_wait(philo->table->lock_print);
 		print_status(philo, DIED);
+		sem_wait(philo->table->lock_print);
 		sem_wait(philo->table->lock_end);
-		sem_post(philo->table->lock_dead);
+		philo->table->lock_dead = sem_open("/lock_dead", O_CREAT, 0644, 0);
 		sem_post(philo->table->lock_end);
 		sem_post(philo->table->lock_eat);
 		return (1);

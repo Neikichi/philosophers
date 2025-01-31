@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 18:51:08 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/28 13:50:41 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	init_destroy(t_data *data);
 // routine
 void	*table_routine(void *arg);
 void	philo_status(t_data *data);
+int		death_status(void);
 
 // Input Check
 int		input_check(int ac, char **av);

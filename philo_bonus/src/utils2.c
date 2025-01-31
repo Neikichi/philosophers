@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:22:27 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 21:22:42 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/28 14:12:51 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,11 @@ void	delay_ms(t_philo *philo, time_t delay_time)
 void	print_status(t_philo *philo, t_status status)
 {
 	sem_wait(philo->table->lock_print);
-	// if (exit_check(philo))
-	// {
-	// 	printf("inherere\n");
-	// 	sem_post(philo->table->lock_print);
-	// 	return ;
-	// }
+	if (death_status())
+	{
+		sem_post(philo->table->lock_print);
+		return ;
+	}
 	if (status == DIED)
 		print_init(philo, "died", status);
 	else if (status == EATING)

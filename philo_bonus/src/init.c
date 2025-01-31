@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 17:26:19 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 02:36:20 by vlow             ###   ########.fr       */
+/*   Updated: 2025/01/28 14:03:03 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 // 		pthread_mutex_lock(&data->table.lock_eat);
 // 		data->philo[i].last_meal = timer_ms();
 // 		pthread_mutex_unlock(&data->table.lock_eat);
-// 		if (pthread_create(&data->philo[i].th, NULL, &table_routine, \
+// 		if (pthread_create(&data->philo[i].th, NULL, &table_routine,
 // 													&data->philo[i]))
 // 			return (0);
 // 		i++;
