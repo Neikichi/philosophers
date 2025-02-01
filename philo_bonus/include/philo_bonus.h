@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/01 03:23:12 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/01 18:15:41 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,11 @@ typedef struct s_philo
 
 typedef struct s_data
 {
+	pthread_t		th;
 	t_table			table;
 	t_philo			philo[MAX_PHILO];
+	pid_t			pid[MAX_PHILO];
+	pthread_mutex_t	test;
 }	t_data;
 
 // init
@@ -84,7 +87,8 @@ void	init_destroy(t_data *data);
 
 // routine
 void	*table_routine(void *arg);
-int		philo_status(t_philo *philo);
+void	*philo_monitor(void *arg);
+void	*philo_status(void *arg);
 int		death_status(void);
 
 // Input Check

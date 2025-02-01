@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 17:44:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/01 03:23:01 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/01 17:26:49 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,19 +67,16 @@
 // 	return (NULL);
 // }
 
-int	philo_status(t_philo *philo)
+void	*philo_status(void *arg)
 {
-	int	loop;
+	t_philo *philo;
 
-	loop = 1;
-	while (loop)
+	philo = (t_philo *)arg;
+	while (1)
 	{
 		usleep(100);
 		if (exit_check(philo))
-		{
-			loop = 0;
-			return(1);
-		}
+			break ;
 	}
-	return(0);
+	return(NULL);
 }

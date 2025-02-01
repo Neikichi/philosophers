@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:28:24 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/01 03:42:48 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/01 17:55:52 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,14 @@
 
 int	exit_check(t_philo *philo)
 {
+	sem_wait(philo->table->lock_eat);
 	if (!philo->times_eaten || dead_check(philo))
+	{
+		philo->table->end = 1;
+		sem_post(philo->table->lock_eat);
 		return (1);
+	}
+	sem_post(philo->table->lock_eat);
 	return (0);
 }
 
@@ -33,27 +39,33 @@ int	death_status(void)
 {
 	sem_t *death;
 
+	// (void)data;
+	// sem_wait(data->table.lock_end);
 	death = sem_open("/lock_dead", 0);
 	if (death == SEM_FAILED)
+	{
+		// sem_post(data->table.lock_end);
 		return (0);
+	}
 	sem_close(death);
+	// sem_post(data->table.lock_end);
 	return (1);
 }
 
 int	dead_check(t_philo *philo)
 {
-	sem_wait(philo->table->lock_eat);
+	// sem_wait(philo->table->lock_eat);
 	if (timer_ms() - philo->last_meal >= philo->table->tt_die)
 	{
 		sem_wait(philo->table->lock_print);
 		print_init(philo, "died", DIED);
-		sem_wait(philo->table->lock_end);
+		// sem_wait(philo->table->lock_end);
 		philo->table->lock_dead = sem_open("/lock_dead", O_CREAT, 0644, 0);
-		sem_post(philo->table->lock_end);
-		sem_post(philo->table->lock_eat);
+		// sem_post(philo->table->lock_end);
+		// sem_post(philo->table->lock_eat);
 		return (1);
 	}
-	sem_post(philo->table->lock_eat);
+	// sem_post(philo->table->lock_eat);
 	return (0);
 }
 
