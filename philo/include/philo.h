@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 00:28:07 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/03 03:18:55 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define ERROR_SYNTAX "Error! Syntax: ./philo <number_of_philosopher> \
 <time_to_die> <time_to_eat> <time_to_sleep> \
 [OPTIONAL: number_of_times_each_philosophers_must_eat]\n"
+# define ERROR_PHILO_COUNT "Error! <number_of_philosopher> [Input: 1 - 200]\n"
 
 // COLOUR
 # define CYAN "\033[1;36m"
@@ -73,7 +74,7 @@ typedef struct s_data
 }	t_data;
 
 // init
-void	init_data(t_data *data, int ac, char **av);
+int		init_data(t_data *data, int ac, char **av);
 int		init_mutex(t_data *data);
 int		init_philo(t_data *data);
 int		init_join_philo(t_data *data);

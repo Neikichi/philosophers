@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/02 18:22:40 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/03 03:19:01 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define ERROR_SYNTAX "Error! Syntax: ./philo <number_of_philosopher> \
 <time_to_die> <time_to_eat> <time_to_sleep> \
 [OPTIONAL: number_of_times_each_philosophers_must_eat]\n"
+# define ERROR_PHILO_COUNT "Error! <number_of_philosopher> [Input: 1 - 200]\n"
 
 // COLOUR
 # define CYAN "\033[1;36m"
@@ -55,6 +56,7 @@ typedef struct s_table
 	sem_t	*lock_forks;
 	sem_t	*lock_dead;
 	sem_t	*lock_wait;
+	sem_t	*lock_monitor;
 }	t_table;
 
 typedef struct s_philo
@@ -80,32 +82,36 @@ typedef struct s_data
 }	t_data;
 
 // init
-void	init_data(t_data *data, int ac, char **av);
-int		init_mutex(t_data *data);
+int		init_data(t_data *data, int ac, char **av);
+int		init_sem(t_data *data);
 int		init_philo(t_data *data);
-int		init_join_philo(t_data *data);
-void	init_destroy(t_data *data);
 
 // routine
-void	*table_routine(void *arg);
+int		table_routine(t_philo *philo);
 void	*philo_monitor(void *arg);
 void	*philo_status(void *arg);
 int		death_status(void);
 
 // Input Check
 int		input_check(int ac, char **av);
+
+// death exit
 int		exit_check(t_philo *philo);
 int		dead_check(t_philo *philo);
+int		exit_error(char *err, int ret);
+
+// print and timer
+time_t	timer_ms(void);
+void	delay_ms(t_philo *philo, time_t delay_time);
+void	print_status(t_philo *philo, t_status status);
+void	print_init(t_philo *philo, char *str, t_status status);
 
 // Utils
 int		ft_atoi(const char *nptr);
 int		ft_isdigit(int c);
 int		ft_isspace(int c);
 int		ft_issign(char c);
-void	print_status(t_philo *philo, t_status status);
-void	print_init(t_philo *philo, char *str, t_status status);
-time_t	timer_ms(void);
-void	delay_ms(t_philo *philo, time_t delay_time);
-int		exit_error(char *err, int ret);
+void	close_semaphore(t_data *data);
+void	unlink_semaphore(void);
 
 #endif

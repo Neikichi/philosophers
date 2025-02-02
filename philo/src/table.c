@@ -6,13 +6,13 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 17:44:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/01/26 00:21:31 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/03 03:16:25 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <unistd.h>
-
+#include <stdio.h>
 static void	eat_routine(t_philo *philo);
 static void	*single_philo(t_philo *philo);
 
@@ -21,6 +21,8 @@ void	*table_routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	while (timer_ms() < philo->table->start_time)
+		;
 	if (!philo->table->tt_die)
 		return (NULL);
 	if (philo->table->t_num == 1)

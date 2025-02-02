@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   print_timer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:22:27 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/03 03:17:49 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/03 02:49:09 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
+#include <semaphore.h>
 #include <sys/time.h>
 #include <unistd.h>
 #include <stdio.h>
-
-static void	print_init(t_philo *philo, char *str, t_status status);
+#include <stdlib.h>
 
 time_t	timer_ms(void)
 {
@@ -34,21 +34,19 @@ void	delay_ms(t_philo *philo, time_t delay_time)
 	while (timer_ms() < delay)
 	{
 		if (exit_check(philo))
-			break ;
+			exit(1);
 		usleep(100);
 	}
 }
 
 void	print_status(t_philo *philo, t_status status)
 {
-	pthread_mutex_lock(&philo->table->lock_print);
+	sem_wait(philo->table->lock_print);
 	if (exit_check(philo))
 	{
-		pthread_mutex_unlock(&philo->table->lock_print);
+		sem_post(philo->table->lock_print);
 		return ;
 	}
-	if (status == DIED)
-		print_init(philo, "died", status);
 	else if (status == EATING)
 		print_init(philo, "is eating", status);
 	else if (status == SLEEPING)
@@ -57,10 +55,15 @@ void	print_status(t_philo *philo, t_status status)
 		print_init(philo, "is thinking", status);
 	else if (status == FORK_1 || status == FORK_2)
 		print_init(philo, "has taken a fork", status);
-	pthread_mutex_unlock(&philo->table->lock_print);
+	else if (status == DIED)
+	{
+		print_init(philo, "died", status);
+		return ;
+	}
+	sem_post(philo->table->lock_print);
 }
 
-static void	print_init(t_philo *philo, char *str, t_status status)
+void	print_init(t_philo *philo, char *str, t_status status)
 {
 	const char	*status_colour;
 
