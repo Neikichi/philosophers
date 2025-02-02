@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/01 18:15:41 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/02 18:22:40 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_table
 	sem_t	*lock_eat;
 	sem_t	*lock_forks;
 	sem_t	*lock_dead;
+	sem_t	*lock_wait;
 }	t_table;
 
 typedef struct s_philo
@@ -75,7 +76,7 @@ typedef struct s_data
 	t_table			table;
 	t_philo			philo[MAX_PHILO];
 	pid_t			pid[MAX_PHILO];
-	pthread_mutex_t	test;
+	int				end;
 }	t_data;
 
 // init

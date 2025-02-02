@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 17:44:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/01 17:26:49 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/02 14:40:34 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@
 // 	pthread_mutex_unlock(&philo->table->forks[philo->fork[0]]);
 // 	return (NULL);
 // }
-
+#include <stdlib.h>
+#include <stdio.h>
 void	*philo_status(void *arg)
 {
 	t_philo *philo;
@@ -75,8 +76,13 @@ void	*philo_status(void *arg)
 	while (1)
 	{
 		usleep(100);
-		if (exit_check(philo))
+		// sem_wait(philo->table->lock_eat);
+		if (dead_check(philo))
+		{
+			// sem_wait(philo->table->lock_eat);
 			break ;
+		}
+		// sem_post(philo->table->lock_eat);
 	}
 	return(NULL);
 }

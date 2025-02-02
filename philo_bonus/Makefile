@@ -33,8 +33,8 @@ fclean: clean
 
 re: fclean all
 
-# debug: CFLAGS += -g -fpic
-# debug: clean all
-# 	@echo "Enable debug mode"
+debug: CFLAGS += -g -fpic
+debug: clean all
+	@echo "Enable debug mode"
 
 .PHONY: all clean fclean re #bonus #debug #valgrind #fsanitize fsan

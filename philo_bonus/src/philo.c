@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:08:35 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/01 18:40:06 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/02 18:33:46 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	*philo_monitor(void *arg)
 	while (1)
 	{
 		usleep(100);
-		if (death_status())
+		if (death_status() || data->end)
 			break ;
 	}
 	i = 0;
@@ -60,11 +60,13 @@ int	main(int ac, char **av)
 	sem_unlink("/lock_eat");
 	sem_unlink("/lock_forks");
 	sem_unlink("/lock_dead");
+	sem_unlink("/lock_wait");
 	data.table.lock_end = sem_open("/lock_end", O_CREAT, 0666, 1);
 	data.table.lock_print = sem_open("/lock_print", O_CREAT, 0666, 1);
 	data.table.lock_eat = sem_open("/lock_eat", O_CREAT, 0666, 1);
 	// data.table.lock_dead = sem_open("/lock_dead", O_CREAT, 0666, 0);
 	data.table.lock_forks = sem_open("/lock_forks", O_CREAT, 0666, data.table.t_num);
+	data.table.lock_wait = sem_open("/lock_wait", O_CREAT, 0666, (data.table.t_num / 2));
 	if (data.table.lock_end == SEM_FAILED || data.table.lock_print == SEM_FAILED || data.table.lock_eat == SEM_FAILED)
 		return (exit_error("Error! Init Sem\n", 1));
 	while (i < data.table.t_num)
@@ -75,7 +77,7 @@ int	main(int ac, char **av)
 		i++;
 	}
 	i = 0;
-	data.table.start_time = timer_ms();
+	data.table.start_time = timer_ms() + (time_t)(data.table.t_num * 20);
 	if (pthread_create(&data.th, NULL, &philo_monitor, &data))
 		return (exit_error("Error! Init Global Philo Monitor\n", 1));
 	while (i < data.table.t_num)
@@ -85,8 +87,10 @@ int	main(int ac, char **av)
 			return (exit_error("Error! Invalid PID", 1));
 		if (!data.pid[i])
 		{
+			while (timer_ms() < data.table.start_time)
+				;
 			sem_wait(data.table.lock_eat);
-			data.philo[i].last_meal = timer_ms();
+			data.philo[i].last_meal = data.table.start_time;
 			sem_post(data.table.lock_eat);
 			if (!data.table.tt_die)
 				exit(1);
@@ -105,6 +109,7 @@ int	main(int ac, char **av)
 				return (exit_error("Error! Init Philo Status\n", 1));
 			while (!exit_check(&data.philo[i]))
 			{
+				sem_wait(data.table.lock_wait);
 				sem_wait(data.table.lock_forks);
 				print_status(&data.philo[i], FORK_1);
 				sem_wait(data.table.lock_forks);
@@ -120,12 +125,13 @@ int	main(int ac, char **av)
 				print_status(&data.philo[i], SLEEPING);
 				sem_post(data.table.lock_forks);
 				sem_post(data.table.lock_forks);
+				sem_post(data.table.lock_wait);
 
 				// if (exit_check(&data.philo[i]))
 				// 	break ;
 				delay_ms(&data.philo[i], data.table.tt_sleep);
 				print_status(&data.philo[i], THINKING);
-				delay_ms(&data.philo[i], data.table.tt_sleep / 2);
+				// delay_ms(&data.philo[i], data.table.tt_die - (data.table.tt_sleep + data.table.tt_sleep) / data.table.t_num);
 			}
 			if (pthread_join(data.philo[i].th, NULL))
 				return (exit_error("Error! Init Thread Join\n", 1));
@@ -135,12 +141,15 @@ int	main(int ac, char **av)
 	}
 	while (waitpid(0, NULL, 0) != -1)
 		;
+	if (!death_status())
+		data.end = 1;
 	if (pthread_join(data.th, NULL))
 		return (exit_error("Error! Init Thread Join\n", 1));
 	sem_close(data.table.lock_end);
 	sem_close(data.table.lock_print);
 	sem_close(data.table.lock_eat);
 	sem_close(data.table.lock_forks);
+	sem_close(data.table.lock_wait);
 	sem_unlink("/lock_end");
 	sem_unlink("/lock_print");
 	sem_unlink("/lock_eat");

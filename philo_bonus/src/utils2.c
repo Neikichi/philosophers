@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:22:27 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/01 03:06:14 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/02 18:17:14 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,24 +56,32 @@ void	print_status(t_philo *philo, t_status status)
 		print_init(philo, "is thinking", status);
 	else if (status == FORK_1 || status == FORK_2)
 		print_init(philo, "has taken a fork", status);
+	else if (status == DIED)
+	{
+		print_init(philo, "died", status);
+		return ;	
+	}
 	sem_post(philo->table->lock_print);
 }
 
 void	print_init(t_philo *philo, char *str, t_status status)
 {
-	const char	*status_colour;
-
-	status_colour = COLOUR;
-	if (status == DIED)
-		status_colour = RED;
-	else if (status == EATING)
-		status_colour = GREEN;
-	else if (status == SLEEPING)
-		status_colour = PURPLE;
-	else if (status == THINKING)
-		status_colour = BLUE;
-	else if (status == FORK_1 || status == FORK_2)
-		status_colour = YELLOW;
-	printf("%ld\t" CYAN "%d\t" COLOUR "%s%s" COLOUR "\n", \
-	timer_ms() - philo->table->start_time, philo->id + 1, status_colour, str);
+	(void)status;
+	// const char	*status_colour;
+	//
+	// status_colour = COLOUR;
+	// if (status == DIED)
+	// 	status_colour = RED;
+	// else if (status == EATING)
+	// 	status_colour = GREEN;
+	// else if (status == SLEEPING)
+	// 	status_colour = PURPLE;
+	// else if (status == THINKING)
+	// 	status_colour = BLUE;
+	// else if (status == FORK_1 || status == FORK_2)
+	// 	status_colour = YELLOW;
+	// printf("%ld\t" CYAN "%d\t" COLOUR "%s%s" COLOUR "\n", \
+	// timer_ms() - philo->table->start_time, philo->id + 1, status_colour, str);
+	printf("%ld\t%d\t%s\n", timer_ms() - philo->table->start_time, philo->id + 1, str);
+	// fflush(stdout);
 }

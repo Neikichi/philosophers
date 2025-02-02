@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 22:39:51 by vlow              #+#    #+#             */
-/*   Updated: 2024/12/15 16:42:44 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/02 17:35:50 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	ft_insert(int i, char **result, int len);
 char	**ft_split(char const *s, char c)
 {
 	char	**result;
-	int		size;	
+	int		size;
 
 	if (!s || *s == '\0')
 	{
