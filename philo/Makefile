@@ -3,7 +3,14 @@ NAME = philo
 SRC_DIR = src
 INC_DIR = include
 
-SRC = $(wildcard $(SRC_DIR)/*.c)
+SRC = \
+	  $(SRC_DIR)/init.c \
+	  $(SRC_DIR)/input_check.c \
+	  $(SRC_DIR)/philo.c \
+	  $(SRC_DIR)/table.c \
+	  $(SRC_DIR)/utils.c \
+	  $(SRC_DIR)/utils2.c \
+	  $(SRC_DIR)/utils3.c
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(SRC_DIR)/%.o)
 
@@ -27,9 +34,9 @@ clean:
 	@echo "Objects files removed."
 
 fclean: clean
-	@echo "Removing $(NAME) and $(BNAME)..."
+	@echo "Removing $(NAME)..."
 	@rm -f $(NAME)
-	@echo "$(NAME) and $(BNAME) removed."
+	@echo "$(NAME) removed."
 
 re: fclean all
 

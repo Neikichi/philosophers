@@ -3,7 +3,15 @@ NAME = philo_bonus
 SRC_DIR = src
 INC_DIR = include
 
-SRC = $(wildcard $(SRC_DIR)/*.c)
+SRC = \
+	  $(SRC_DIR)/death_exit.c \
+	  $(SRC_DIR)/init.c \
+	  $(SRC_DIR)/input_check.c \
+	  $(SRC_DIR)/philo.c \
+	  $(SRC_DIR)/print_timer.c \
+	  $(SRC_DIR)/table.c \
+	  $(SRC_DIR)/utils.c \
+	  $(SRC_DIR)/utils2.c
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(SRC_DIR)/%.o)
 
@@ -33,8 +41,8 @@ fclean: clean
 
 re: fclean all
 
-debug: CFLAGS += -g -fpic
-debug: clean all
-	@echo "Enable debug mode"
+# debug: CFLAGS += -g -fpic
+# debug: clean all
+# 	@echo "Enable debug mode"
 
 .PHONY: all clean fclean re #bonus #debug #valgrind #fsanitize fsan

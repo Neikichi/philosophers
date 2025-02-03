@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 17:44:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/03 02:47:56 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/04 01:29:56 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 static void	eat_routine(t_philo *philo);
 static void	single_philo(t_philo *philo);
+static void	delay_offset(t_philo *philo);
 
 int	table_routine(t_philo *philo)
 {
@@ -29,7 +30,7 @@ int	table_routine(t_philo *philo)
 	if (philo->table->t_num == 1)
 		single_philo(philo);
 	else if (philo->id % 2)
-		delay_ms(philo, philo->table->tt_sleep);
+		delay_offset(philo);
 	if (pthread_create(&philo->th, NULL, &philo_status, philo))
 		return (exit_error("Error! Init Philo Status\n", 0));
 	while (!exit_check(philo))
@@ -62,6 +63,7 @@ static void	eat_routine(t_philo *philo)
 	sem_post(philo->table->lock_wait);
 	delay_ms(philo, philo->table->tt_sleep);
 	print_status(philo, THINKING);
+	delay_offset(philo);
 }
 
 static void	single_philo(t_philo *philo)
@@ -72,6 +74,18 @@ static void	single_philo(t_philo *philo)
 	print_status(philo, DIED);
 	sem_post(philo->table->lock_forks);
 	exit(1);
+}
+
+static void	delay_offset(t_philo *philo)
+{
+	int	offset;
+
+	offset = (philo->table->tt_die - \
+			(timer_ms() - philo->last_meal) - \
+			philo->table->tt_eat) / 2;
+	if (offset < 0)
+		offset = 0;
+	delay_ms(philo, offset);
 }
 
 void	*philo_status(void *arg)

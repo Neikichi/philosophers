@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:08:35 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/03 02:59:17 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/03 15:23:54 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ int	main(int ac, char *av[])
 		return (exit_error("Error! Init Mutex\n", 1));
 	if (!init_philo(&data))
 		return (exit_error("Error! Init Philosophers\n", 1));
-	if (data.table.t_num > 1)
-		philo_status(&data);
 	if (!init_join_philo(&data))
 		return (exit_error("Error! End Table\n", 1));
 	init_destroy(&data);

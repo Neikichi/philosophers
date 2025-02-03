@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:07:17 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/03 03:18:55 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/04 01:14:51 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,28 @@ typedef struct s_table
 	time_t			start_time;
 	pthread_mutex_t	lock_print;
 	pthread_mutex_t	lock_end;
-	pthread_mutex_t	lock_eat;
 	pthread_mutex_t	forks[MAX_PHILO];
+	pthread_mutex_t	lock_status;
 }	t_table;
 
 typedef struct s_philo
 {
-	pthread_t	th;
-	int			id;
-	int			fork[2];
-	int			eating;
-	int			sleeping;
-	int			thinking;
-	int			times_eaten;
-	time_t		last_meal;
-	t_table		*table;
+	pthread_t		th;
+	pthread_t		th2;
+	int				id;
+	int				fork[2];
+	int				eating;
+	int				sleeping;
+	int				thinking;
+	int				times_eaten;
+	time_t			last_meal;
+	t_table			*table;
+	pthread_mutex_t	lock_eat;
 }	t_philo;
 
 typedef struct s_data
 {
+	pthread_t		th;
 	t_table			table;
 	t_philo			philo[MAX_PHILO];
 }	t_data;
@@ -82,7 +85,7 @@ void	init_destroy(t_data *data);
 
 // routine
 void	*table_routine(void *arg);
-void	philo_status(t_data *data);
+void	*philo_status(void *arg);
 
 // Input Check
 int		input_check(int ac, char **av);
