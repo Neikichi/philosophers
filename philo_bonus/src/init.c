@@ -6,7 +6,7 @@
 /*   By: vlow <vlow@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 17:26:19 by vlow              #+#    #+#             */
-/*   Updated: 2025/02/03 02:52:08 by vlow             ###   ########.fr       */
+/*   Updated: 2025/02/04 16:17:50 by vlow             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,8 @@ int	init_sem(t_data *data)
 	if (data->table.lock_end == SEM_FAILED || \
 		data->table.lock_print == SEM_FAILED || \
 		data->table.lock_eat == SEM_FAILED || \
-		data->table.lock_wait == SEM_FAILED)
+		data->table.lock_wait == SEM_FAILED || \
+		data->table.lock_monitor == SEM_FAILED)
 		return (0);
 	return (1);
 }
