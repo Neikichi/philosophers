@@ -36,7 +36,6 @@ m3/philosophers/
     │   ├── print_timer.c    # Status output with timestamps
     │   ├── input_check.c    # Argument validation
     │   └── utils.c–2        # Helpers
-    ├── log.py               # Python log analyser / visualiser
     └── Makefile
 ```
 
@@ -168,5 +167,4 @@ make clean / make fclean / make re
 
 - All time values are in **milliseconds**.
 - `usleep` precision limitations on Linux are mitigated by a busy-wait loop (`delay_ms`) that checks elapsed time against a high-resolution `gettimeofday` timer.
-- The `log.py` script in `philo_bonus/` can be used to parse and visualise simulation logs.
 - Maximum supported philosopher count is **200** (defined by `MAX_PHILO`).
